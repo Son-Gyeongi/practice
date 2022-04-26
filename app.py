@@ -16,7 +16,7 @@ def food_post():
     name_receive = request.form['name_give']
     url_receive = request.form['url_give']
     choice_receive = request.form['choice_give']
-    comment_receive = request.form['comment_give']
+    recipe_receive = request.form['recipe_give']
 
     food_list = list(db.food.find({}, {'_id': False}))
     count = len(food_list) + 1
@@ -26,7 +26,7 @@ def food_post():
         'name': name_receive,
         'url': url_receive,
         'choice': choice_receive,
-        'comment': comment_receive
+        'recipe': recipe_receive
     }
     db.food.insert_one(doc)
 
@@ -42,9 +42,11 @@ def food_get():
 def comment_post():
     comment_receive = request.form['comment_give']
     nickname_receive = request.form['nickname_give']
+    num_receive = request.form['num_give']
     doc = {
         'comment': comment_receive,
         'nickname': nickname_receive,
+        'num': num_receive
     }
     db.comment.insert_one(doc)
     return jsonify({'msg': '댓글 추가 완료!'})
@@ -54,6 +56,19 @@ def comment_post():
 def comment_get():
     comment_list = list(db.comment.find({}, {'_id':False}))
     return jsonify({'comments':comment_list})
+
+@app.route('/profile/<username>')
+def get_profile(username):
+    return 'profile : ' + username
+#[출처] [Python Flask] # 02 파이썬 플라스크 라우팅|작성자 넬티아
+
+@app.route('/message/<int:message_id>')
+def get_message(message_id):
+    return 'message_id : %d' % message_id
+#[출처] [Python Flask] # 02 파이썬 플라스크 라우팅|작성자 넬티아
+
+
+
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)

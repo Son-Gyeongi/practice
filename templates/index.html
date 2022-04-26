@@ -155,15 +155,33 @@
                         let name = rows[i]['name']
                         let url = rows[i]['url']
                         let choice = rows[i]['choice']
-                        let comment = rows[i]['comment']
+                        let recipe = rows[i]['recipe']
+                        let num = rows[i]['num']
 
-                        let temp_html = `<div class="card">
+                        let temp_html = `<div class="col">
+                                            <div class="card">
                                                 <img src="${url}"
-                                                 class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title">${name}</h5>
-                                                <p class="card-text">${comment}</p>
-                                                <p>${choice}</p>
+                                                     class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${name}</h5>
+                                                    <a class="card-text" id="recipe" type="button" href="${recipe}" target="_blank">${name} 레시피 영상</a>
+                                                    <p>${choice}</p>
+                                                </div>
+                            <!--                    내가 만든 거-->
+                                                <div class="comment_btn">
+                                                    <button type="button" onclick="window.open('/message/${num}')" class="btn btn-warning">댓글 보기</button>
+                                                </div>
+                                                <!--서빈님이 만든 거-->
+                                                <div class="comments-container" id="comment-list">
+                                                    <div class="comments-div">
+                                                        <input id="nickname" class="comment__input-nick" type="text" placeholder="nickname"/>
+                                                        <textarea id="usercomment" class="comment__input" placeholder="comment"></textarea>
+                                                        <button onclick="comment_save()" class="comment-btn">댓글달기</button>
+                                                    </div>
+                                                    <div id="comment_box" class="comment-box">
+
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>`
                         $('#foodbox').append(temp_html)
@@ -175,12 +193,12 @@
             let name = $('#name').val()
             let url = $('#url').val()
             let choice = $('#choice').val()
-            let comment = $('#comment').val()
+            let recipe = $('#recipe').val()
 
             $.ajax({
                 type: "POST",
                 url: "/food",
-                data: {name_give: name, url_give: url, choice_give: choice, comment_give: comment},
+                data: {name_give: name, url_give: url, choice_give: choice, recipe_give: recipe},
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
@@ -189,13 +207,13 @@
         }
 
         //서빈님이 만드신거
-        function comment_save() {
+        function comment_save(num) {
             let comment = $('#usercomment').val()
             let nickname = $('#nickname').val()
             $.ajax({
                 type: "POST",
                 url: "/food/comment",
-                data: {comment_give: comment, nickname_give: nickname},
+                data: {comment_give: comment, nickname_give: nickname, num_give:num},
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
@@ -204,13 +222,6 @@
         }
 
         //내가 진행하는 댓글 GET 클라이언트
-        function open_comment() {
-            $('#comment-list').show()
-        }
-        function close_comment() {
-            $('#comment-list').hide()
-        }
-
         function comment() {
             $.ajax({
                 type: 'GET',
@@ -268,7 +279,7 @@
             </select>
         </div>
         <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+            <textarea class="form-control" placeholder="Leave a comment here" id="recipe"
                       style="height: 100px"></textarea>
             <label>레시피 설명</label>
         </div>
@@ -282,22 +293,21 @@
     </div>
     <div class="wrap">
         <div id="foodbox" class="row row-cols-1 row-cols-md-4 g-4">
-            <div class="col">
+            <!--<div class="col">
                 <div class="card">
                     <img src="https://ppss.kr/wp-content/uploads/2019/08/0-87.jpg"
                          class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">김치찌개</h5>
-                        <p class="card-text">김치를 넣은 찌개</p>
+                        <a class="card-text">김치를 넣은 찌개</a>
                         <p>한식</p>
-                        <p class="mycomment">굳</p>
                     </div>
-<!--                    내가 만든 거-->
+&lt;!&ndash;                    내가 만든 거&ndash;&gt;
                     <div class="comment_btn">
                         <button onclick="open_comment()" type="button" class="btn btn-warning">댓글 보기</button>
                         <button onclick="close_comment()" type="button" class="btn btn-outline-warning">댓글 닫기</button>
                     </div>
-                    <!--서빈님이 만든 거-->
+                    &lt;!&ndash;서빈님이 만든 거&ndash;&gt;
                     <div class="comments-container" id="comment-list">
                         <div class="comments-div">
                             <input id="nickname" class="comment__input-nick" type="text" placeholder="nickname"/>
@@ -305,7 +315,7 @@
                             <button onclick="comment_save()" class="comment-btn">댓글달기</button>
                         </div>
                         <div id="comment_box" class="comment-box">
-                            <!--<div class="card">
+                            &lt;!&ndash;<div class="card">
                                 <div class="card-body">
                                     <blockquote class="blockquote mb-0">
                                         <p>${comment}1</p>
@@ -320,11 +330,11 @@
                                         <footer class="blockquote-footer">${nickname}2</footer>
                                     </blockquote>
                                 </div>
-                            </div>-->
+                            </div>&ndash;&gt;
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 
